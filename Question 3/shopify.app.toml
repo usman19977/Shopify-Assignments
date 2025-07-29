@@ -3,7 +3,7 @@
 client_id = "01921774055436e2de550386dbc834a7"
 name = "preorder-order-tagger"
 handle = "preorder-order-tagger"
-application_url = "https://example.com/"
+application_url = "https://18006602dcbe.ngrok-free.app"
 embedded = true
 
 [build]
@@ -27,10 +27,10 @@ api_version = "2025-07"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "write_products,read_orders"
+scopes = "read_all_orders,read_orders,write_orders,write_products"
 
 [auth]
-redirect_urls = [ "https://example.com/api/auth" ]
+redirect_urls = ["https://18006602dcbe.ngrok-free.app/auth/callback", "https://18006602dcbe.ngrok-free.app/auth/shopify/callback", "https://18006602dcbe.ngrok-free.app/api/auth/callback"]
 
 [pos]
 embedded = false

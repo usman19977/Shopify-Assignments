@@ -20,39 +20,16 @@ const shopify = shopifyApp({
   webhooks: {
     ORDERS_CREATE: {
       deliveryMethod: DeliveryMethod.Http,
-      callbackUrl: "/webhooks",
-      callback: async (_topic, shop, body) => {
-        console.log("ORDERS_CREATE");
-        const order = JSON.parse(body);
-  
-        const isPreorder = order.line_items.some((item) =>
-          item.properties?.some(
-            (prop) =>
-              prop.name?.toLowerCase().includes("pre-order") &&
-              prop.value?.toLowerCase() === "yes"
-          )
-        );
-  
-        if (isPreorder) {
-          const sessions = await shopify.sessionStorage.findSessionsByShop(shop);
-          const session = sessions[0];
-          const client = new shopify.api.clients.Rest({ session });
-  
-          await client.put({
-            path: `orders/${order.id}`,
-            data: {
-              order: {
-                id: order.id,
-                tags: `${order.tags}, pre-order`,
-              },
-            },
-            type: shopify.api.rest.DataType.JSON,
-          });
-  
-          console.log(`Tagged order ${order.id} as 'pre-order'`);
-        }
-      }
+      callbackUrl: "/webhooks"
     },
+  },
+  hooks: {
+    afterAuth: async ({session}) => {
+      // Register webhooks for the shop
+      // In this example, every shop will have these webhooks
+      // You could wrap this in some custom shop specific conditional logic if needed
+      shopify.registerWebhooks({session});
+    }
   },
   future: {
     unstable_newEmbeddedAuthStrategy: true,
