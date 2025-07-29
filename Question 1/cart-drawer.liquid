@@ -1,0 +1,18 @@
+ <script>
+  window.cartUpsellQueue = [
+    {% for item in cart.items %}
+      {
+        key: "{{ item.key }}",
+        productId: {{ item.product.id }},
+        product_handle: "{{ item.product.handle }}",
+        product_title: "{{ item.product.title | escape }}",
+        upsellHandles: [
+          {% assign upsells = item.product.metafields.custom.upsell_products.value %}
+          {% for upsell in upsells %}
+            "{{ upsell.handle }}"{% unless forloop.last %},{% endunless %}
+          {% endfor %}
+        ]
+      }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ];
+</script>
